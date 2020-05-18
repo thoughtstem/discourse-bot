@@ -8,8 +8,16 @@
 
 (require json)
 
-(define discourse-key
-  (make-parameter #f) )
+(define (try-to-find-discourse-key)
+  (define usual-place (build-path 
+			(current-directory)
+			".discourse-key"))
+  (if (file-exists? usual-place)
+      (begin
+	(string-trim (file->string usual-place)))
+      #f))
+
+(define discourse-key (make-parameter (try-to-find-discourse-key)))
 
 (define (rubyify s)
   (string->symbol
